@@ -25,13 +25,12 @@ def load_images(card_images):
             card_images.append((10, image,))
 
 
-def deal_dealer():
-    value, card = random.choice(cards)
-    value_label = tk.Label(window, text=value, font=('bold', 15), background=bg_color, foreground=fg_color)
-    value_label.grid(row=0, column=0)
-
-
-
+# def deal_dealer():  # not working
+#     global dealerScore, dealerPoints
+#     value, card = random.choice(deck)
+#     score = tk.getint(dealerScore) + value
+#
+#     dealerPoints.configure(textvariable=score)
 
 
 window = tk.Tk()
@@ -39,26 +38,39 @@ bg_color = "#116D6E"
 fg_color = "white"
 
 
-cards = []
-load_images(cards)
+deck = []
+load_images(deck)
 
 # Set up the screen and frames for the dealer and the player
 window.title("Black Jack")
 window.geometry("640x480")
 window.configure(background=bg_color)
 
-dealerLabel = tk.Label(window, text='Dealer', font=('bold', 15), background=bg_color, foreground=fg_color)
-dealerLabel.grid(row=0, column=1, columnspan=3)
+result_text = tk.StringVar()
+result = tk.Label(window, textvariable=result_text, font=('bold', 15), background=bg_color, foreground=fg_color)
+result.grid(row=0, column=0, columnspan=3)
 
-playerLabel = tk.Label(text='Player', font=('bold', 15), background=bg_color, foreground=fg_color)
-playerLabel.grid(row=4, column=1, columnspan=3)
+cardFrame = tk.Frame(window, relief="sunken", borderwidth=1, background=bg_color)
+cardFrame.grid(row=1, column=0, sticky="ew", columnspan=3, rowspan=2)
 
+
+dealerScore = tk.IntVar()
+dealerLabel = tk.Label(cardFrame, text='Dealer', font=('bold', 15), background=bg_color, foreground=fg_color)
+dealerLabel.grid(row=0, column=0)
+dealerPoints = tk.Label(cardFrame, textvariable=dealerScore, background=bg_color, fg=fg_color, font=('bold', 15))
+dealerPoints.grid(row=1, column=0)
+
+playerScore = tk.IntVar()
+playerLabel = tk.Label(cardFrame, text='Player', font=('bold', 15), background=bg_color, foreground=fg_color)
+playerLabel.grid(row=2, column=0)
+playerPoints = tk.Label(cardFrame, textvariable=playerScore, background=bg_color, fg=fg_color, font=('bold', 15))
+playerPoints.grid(row=3, column=0)
 
 hitButton = tk.Button(text='Hit!')
 stopButton = tk.Button(text='Stop')
 hitButton.grid(row=5, column=1)
 stopButton.grid(row=5, column=2)
-newGameButton = tk.Button(text='New Game', command=deal_dealer)
+newGameButton = tk.Button(text='New Game')
 newGameButton.grid(row=6, column=1)
 shuffleButton = tk.Button(text='Shuffle')
 shuffleButton.grid(row=6, column=2)
