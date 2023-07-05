@@ -1,4 +1,4 @@
-import pprint
+# import pprint
 import tkinter
 import tkinter as tk
 import random
@@ -38,7 +38,7 @@ def deal_dealer():
     for widget in dealer_card_frame.winfo_children():
         widget.destroy()
     # choose card
-    random_card = deck.pop(random.randint(1, len(deck)-1))
+    random_card = deck.pop(random.randint(1, len(deck) - 1))
     dealer_hand.append(random_card)
     # add score
     dealer_score = calculate_score(dealer_hand)
@@ -58,12 +58,15 @@ def play_dealer():
     while current_score < 17:
         deal_dealer()
         current_score = calculate_score(dealer_hand)
-    if current_score > 21 or dealer_score < player_score < 21:
+    if current_score == 21:
+        result_text.set("DEALER WON!! BLACKJACK")
+    elif current_score > 21 or current_score < player_score < 21:
         result_text.set("PLAYER WON!")
-        window.update()
+    elif player_score < current_score < 21:
+        result_text.set("DEALER WON!")
     elif current_score == calculate_score(player_hand):
         result_text.set("DRAW!")
-        window.update()
+    window.update()
 
 
 def deal_player():
@@ -72,7 +75,7 @@ def deal_player():
     for widget in player_card_frame.winfo_children():
         widget.destroy()
     # choose card
-    random_card = deck.pop(random.randint(1, len(deck)-1))
+    random_card = deck.pop(random.randint(1, len(deck) - 1))
     player_hand.append(random_card)
     # add score
     player_score = calculate_score(player_hand)
@@ -94,7 +97,6 @@ def deal_player():
 
 def calculate_score(hand):
     total_list = []
-    score = 0
     for card in hand:
         value, _ = card
         total_list.append(value)
@@ -126,58 +128,62 @@ def play_bj():
     deal_player()
 
 
-window = tk.Tk()
 bg_color = "#116D6E"
 fg_color = "white"
 font = ('bold', 15)
-# Set up the screen and frames for the dealer and the player
-window.title("Black Jack")
-window.geometry("640x480")
-window.configure(background=bg_color)
 
-deck = []
-load_images(deck)
-# pprint.pprint(deck)
+if __name__ == "__main__":
+    window = tk.Tk()
 
-# 1 - Top is reserved for info
-result_text = tk.StringVar()
-result = tk.Label(window, textvariable=result_text, font=font, background=bg_color, foreground=fg_color)
-result.grid(row=0, column=0, columnspan=3)
+    # Set up the screen and frames for the dealer and the player
+    window.title("Black Jack")
+    window.geometry("640x480+2500+150")
+    window.configure(background=bg_color)
 
+    deck = []
+    load_images(deck)
+    # pprint.pprint(deck)
 
-# 2- mid-section (cardFrame) is for game info
-cardFrame = tk.Frame(window, relief="sunken", borderwidth=1, background=bg_color)
-cardFrame.grid(row=1, column=0, sticky="ew", columnspan=3, rowspan=2)
+    # 1 - Top is reserved for info
+    result_text = tk.StringVar()
+    result = tk.Label(window, textvariable=result_text, font=font, background=bg_color, foreground=fg_color)
+    result.grid(row=0, column=0, columnspan=3)
 
-dealerScoreLabel = tk.IntVar()
-tk.Label(cardFrame, text='Dealer', font=font, background=bg_color, foreground=fg_color).grid(row=0, column=0)
-tk.Label(cardFrame, textvariable=dealerScoreLabel, background=bg_color, fg=fg_color, font=font).grid(row=1, column=0)
+    # 2- mid-section (cardFrame) is for game info
+    cardFrame = tk.Frame(window, relief="sunken", borderwidth=1, background=bg_color)
+    cardFrame.grid(row=1, column=0, sticky="ew", columnspan=3, rowspan=2)
 
-playerScoreLabel = tk.IntVar()
-tk.Label(cardFrame, text='Player', font=font, background=bg_color, foreground=fg_color).grid(row=2, column=0)
-tk.Label(cardFrame, textvariable=playerScoreLabel, background=bg_color, fg=fg_color, font=font).grid(row=3, column=0)
+    dealerScoreLabel = tk.IntVar()
+    tk.Label(cardFrame, text='Dealer', font=font, background=bg_color, foreground=fg_color).grid(row=0, column=0)
+    tk.Label(cardFrame, textvariable=dealerScoreLabel, background=bg_color, fg=fg_color, font=font).grid(row=1,
+                                                                                                         column=0)
 
-# Frame to hold the card images
-dealer_card_frame = tk.Frame(cardFrame, background=bg_color)
-dealer_card_frame.grid(row=0, column=1, rowspan=2, sticky="ew")
-player_card_frame = tk.Frame(cardFrame, background=bg_color)
-player_card_frame.grid(row=2, column=1, rowspan=2, sticky='ew')
+    playerScoreLabel = tk.IntVar()
+    tk.Label(cardFrame, text='Player', font=font, background=bg_color, foreground=fg_color).grid(row=2, column=0)
+    tk.Label(cardFrame, textvariable=playerScoreLabel, background=bg_color, fg=fg_color, font=font).grid(row=3,
+                                                                                                         column=0)
 
+    # Frame to hold the card images
+    dealer_card_frame = tk.Frame(cardFrame, background=bg_color)
+    dealer_card_frame.grid(row=0, column=1, rowspan=2, sticky="ew")
+    player_card_frame = tk.Frame(cardFrame, background=bg_color)
+    player_card_frame.grid(row=2, column=1, rowspan=2, sticky='ew')
 
-# 3- Bottom frame reserved for Button configurations
-buttonFrame = tkinter.Frame(window, background=bg_color)
-buttonFrame.grid(row=3, column=0, columnspan=5, sticky="w")
-hitButton = tk.Button(buttonFrame, text='Hit!', command=deal_player)
-stopButton = tk.Button(buttonFrame, text='Stop', command=play_dealer)
-hitButton.grid(row=0, column=0, sticky="ew")
-stopButton.grid(row=0, column=1, sticky="ew")
-newGameButton = tk.Button(buttonFrame, text='New Game', command=play_bj)
-newGameButton.grid(row=1, column=0, sticky="ew")
-shuffleButton = tk.Button(buttonFrame, text='Shuffle', command=shuffle_cards)
-shuffleButton.grid(row=1, column=1, sticky="ew")
-exitButton = tk.Button(buttonFrame, text="     Quit     ", command=window.quit)
-exitButton.grid(row=0, column=2, rowspan=2, columnspan=2, sticky="nsew")
+    # 3- Bottom frame reserved for Button configurations
+    buttonFrame = tkinter.Frame(window, background=bg_color)
+    buttonFrame.grid(row=3, column=0, columnspan=5, sticky="w")
+    hitButton = tk.Button(buttonFrame, text='Hit!', command=deal_player)
+    stopButton = tk.Button(buttonFrame, text='Stop', command=play_dealer)
+    hitButton.grid(row=0, column=0, sticky="ew")
+    stopButton.grid(row=0, column=1, sticky="ew")
+    newGameButton = tk.Button(buttonFrame, text='New Game', command=play_bj)
+    newGameButton.grid(row=1, column=0, sticky="ew")
+    shuffleButton = tk.Button(buttonFrame, text='Shuffle', command=shuffle_cards)
+    shuffleButton.grid(row=1, column=1, sticky="ew")
+    exitButton = tk.Button(buttonFrame, text="     Quit     ", command=window.quit)
+    exitButton.grid(row=0, column=2, rowspan=2, columnspan=2, sticky="nsew")
 
-play_bj()
+    play_bj()
+    print(__name__)
 
-window.mainloop()
+    window.mainloop()
