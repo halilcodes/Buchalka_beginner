@@ -126,10 +126,6 @@ def play_bj():
     deal_player()
 
 
-deck = []
-load_images(deck)
-# pprint.pprint(deck)
-
 window = tk.Tk()
 bg_color = "#116D6E"
 fg_color = "white"
@@ -139,6 +135,9 @@ window.title("Black Jack")
 window.geometry("640x480")
 window.configure(background=bg_color)
 
+deck = []
+load_images(deck)
+# pprint.pprint(deck)
 
 # 1 - Top is reserved for info
 result_text = tk.StringVar()
@@ -176,5 +175,7 @@ newGameButton = tk.Button(buttonFrame, text='New Game', command=play_bj)
 newGameButton.grid(row=1, column=0, sticky="ew")
 shuffleButton = tk.Button(buttonFrame, text='Shuffle', command=shuffle_cards)
 shuffleButton.grid(row=1, column=1, sticky="ew")
+
+play_bj()
 
 window.mainloop()
