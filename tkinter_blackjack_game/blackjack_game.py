@@ -166,7 +166,7 @@ player_card_frame.grid(row=2, column=1, rowspan=2, sticky='ew')
 
 # 3- Bottom frame reserved for Button configurations
 buttonFrame = tkinter.Frame(window, background=bg_color)
-buttonFrame.grid(row=3, column=0, columnspan=3, sticky="w")
+buttonFrame.grid(row=3, column=0, columnspan=5, sticky="w")
 hitButton = tk.Button(buttonFrame, text='Hit!', command=deal_player)
 stopButton = tk.Button(buttonFrame, text='Stop', command=play_dealer)
 hitButton.grid(row=0, column=0, sticky="ew")
@@ -175,6 +175,8 @@ newGameButton = tk.Button(buttonFrame, text='New Game', command=play_bj)
 newGameButton.grid(row=1, column=0, sticky="ew")
 shuffleButton = tk.Button(buttonFrame, text='Shuffle', command=shuffle_cards)
 shuffleButton.grid(row=1, column=1, sticky="ew")
+exitButton = tk.Button(buttonFrame, text="     Quit     ", command=window.quit)
+exitButton.grid(row=0, column=2, rowspan=2, columnspan=2, sticky="nsew")
 
 play_bj()
 
