@@ -22,6 +22,27 @@
 # The height will still need to be constrained, though.
 
 import tkinter as tk
+import tkinter.messagebox
+
+
+def btn_click(char):
+    if char == "=":
+        if resultBox.get():
+            try:
+                answer = (str(eval(resultBox.get())))
+            except SyntaxError:
+                tk.messagebox.showerror("Error", "Invalid calculation. ")
+            except ZeroDivisionError:
+                tk.messagebox.showerror("Error", "Cannot divide by zero. ")
+            else:
+                resultBox.delete(0, tk.END)
+                resultBox.insert(0, answer)
+    if char == 'C':
+        resultBox.delete(0, tk.END)
+    elif char == "CE":
+        resultBox.delete(len(resultBox.get()) - 1, tk.END)
+    else:
+        resultBox.insert(tk.END, char)
 
 
 window = tk.Tk()
@@ -47,10 +68,8 @@ zeroButton.grid(row=5, column=0, sticky='ew')
 num = 1
 for row in range(4, 1, -1):
     for col in range(0, 3):
-        def cur_num():
-            resultBox.insert(string=str(num), index=tk.END)
         print(row, col)
-        numButton = tk.Button(window, text=str(num), command=cur_num)
+        numButton = tk.Button(window, text=str(num), command=lambda char=str(num): btn_click(char))
         numButton.grid(row=row, column=col, sticky='ew')
         num += 1
 
@@ -61,7 +80,6 @@ for row, sign in enumerate(["+", "-", "*", "/"]):
     print(row, sign)
     signButton = tk.Button(window, text=sign)
     signButton.grid(row=row+2, column=3, sticky='ew')
-
 
 
 window.mainloop()
